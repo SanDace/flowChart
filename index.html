@@ -1,35 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mermaid Flowchart</title>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
-
-        const svgElement = document.querySelector('svg'); // Select the rendered SVG
-        const svgData = new XMLSerializer().serializeToString(svgElement);
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const img = new Image();
-
-        img.onload = function () {
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.drawImage(img, 0, 0);
-            const pngData = canvas.toDataURL('image/png');
-
-            // Create a download link
-            const a = document.createElement('a');
-            a.href = pngData;
-            a.download = 'diagram.png';
-            a.click();
-        };
-
-        img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
-
         mermaid.initialize({ startOnLoad: true });
+
+        function downloadHighRes() {
+            html2canvas(document.querySelector(".mermaid"), {
+                scale: 4,
+                backgroundColor: '#ffffff'
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'diagram-high-res.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
     </script>
 </head>
 
@@ -142,6 +130,7 @@
         class F,H,I,M,P,Q,S,X,Y,AG,AI,AK,AR,AY,BC decision
         class J,R,Z,AH,AJ,AS error
     </div>
+    <button onclick="downloadHighRes()">Download High-Res</button>
 </body>
 
 </html>
