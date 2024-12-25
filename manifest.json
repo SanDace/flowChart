@@ -1,0 +1,15 @@
+{
+    "manifest_version": 3,
+    "name": "Your Extension Name",
+    "version": "1.0",
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "fonts/Inter/Inter-Light.woff2"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
+        }
+    ]
+}

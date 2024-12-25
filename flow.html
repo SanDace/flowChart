@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+
+        function downloadHighRes() {
+            html2canvas(document.querySelector(".mermaid"), {
+                scale: 4,
+                backgroundColor: '#ffffff'
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'diagram-high-res.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div class="mermaid">
+
+        flowchart TD
+        A([Start Application]) --> B[[Show Loading Screen]]
+        B --> C[[Initialize Main Application]]
+
+        C --> D{User Selects Action}
+
+        %% Student Management Branch
+        D -->|Student Management| E[[Student Section]]
+        E --> F{Add New Student?}
+        F -->|Yes| G[/Input Student Details/]
+        G --> H{Valid Input?}
+        H -->|No| G
+        H -->|Yes| I{Duplicate Email/Phone?}
+        I -->|Yes| J>Show Error Message] --> G
+        I -->|No| K[(Add Student to Database)]
+        K --> L[[Update Student List]]
+        L --> |Continue?| D
+        L --> |Exit| BC
+        F -->|No| M{Search Student?}
+        M -->|Yes| N[/Enter Search Criteria/]
+        N --> O[[Display Results]]
+        O --> |Continue?| D
+        O --> |Exit| BC
+        M -->|No| P{Delete Student?}
+        P -->|Yes| Q{Student Selected?}
+        Q -->|No| R>Show Selection Error]
+        R --> |Continue?| D
+        R --> |Exit| BC
+        Q -->|Yes| S{Confirm Delete?}
+        S -->|No| E
+        S -->|Yes| T[(Delete from Database)]
+        T --> L
+        P -->|No| D
+
+        %% Instructor Management Branch
+        D -->|Instructor Management| U[[Instructor Section]]
+        U --> V{Add New Instructor?}
+        V -->|Yes| W[/Input Instructor Details/]
+        W --> X{Valid License?}
+        X -->|No| W
+        X -->|Yes| Y{Duplicate License?}
+        Y -->|Yes| Z>Show Error Message] --> W
+        Y -->|No| AA[(Add Instructor to Database)]
+        AA --> AB[[Update Instructor List]]
+        AB --> |Continue?| D
+        AB --> |Exit| BC
+        V -->|No| AC{Search Instructor?}
+        AC -->|Yes| AD[/Enter Search Criteria/]
+        AD --> AE[[Display Results]]
+        AE --> |Continue?| D
+        AE --> |Exit| BC
+        AC -->|No| AF{Delete Instructor?}
+        AF -->|Yes| AG{Instructor Selected?}
+        AG -->|No| AH>Show Selection Error]
+        AH --> |Continue?| D
+        AH --> |Exit| BC
+        AG -->|Yes| AI{Has Active Lessons?}
+        AI -->|Yes| AJ>Show Cannot Delete Error]
+        AJ --> |Continue?| D
+        AJ --> |Exit| BC
+        AI -->|No| AK{Confirm Delete?}
+        AK -->|No| U
+        AK -->|Yes| AL[(Delete from Database)]
+        AL --> AB
+        AF -->|No| D
+
+        %% Lesson Management Branch
+        D -->|Lesson Management| AM[[Lesson Section]]
+        AM --> AN{Book New Lesson?}
+        AN -->|Yes| AO[/Select Student & Instructor/]
+        AO --> AP[/Choose Lesson Type/]
+        AP --> AQ[/Set Date & Duration/]
+        AQ --> AR{All Fields Filled?}
+        AR -->|No| AS>Show Missing Fields Error] --> AO
+        AR -->|Yes| AT[[Calculate Fee]]
+        AT --> AU[(Book Lesson)]
+        AU --> AV[[Update Lesson List]]
+        AV --> |Continue?| D
+        AV --> |Exit| BC
+        AN -->|No| AW{View Lessons?}
+        AW -->|Yes| AX[[Display Timetable]]
+        AX --> AY{Filter By Date?}
+        AY -->|Yes| AZ[/Select Date/]
+        AZ --> BA[[Show Filtered Lessons]]
+        BA --> |Continue?| D
+        BA --> |Exit| BC
+        AY -->|No| BB[[Show All Lessons]]
+        BB --> |Continue?| D
+        BB --> |Exit| BC
+        AW -->|No| D
+
+        %% System Actions
+        D -->|Exit System| BC{Save Changes?}
+        BC -->|Yes| BD[(Save to Database)]
+        BD --> BE([End Application])
+        BC -->|No| BE
+
+        %% Styling
+        classDef process fill:#a8d5ff,stroke:#0066cc,stroke-width:2px
+        classDef decision fill:#ffe6cc,stroke:#ff9933,stroke-width:2px
+        classDef error fill:#ffcccc,stroke:#ff3333,stroke-width:2px
+
+        class A,BE process
+        class F,H,I,M,P,Q,S,X,Y,AG,AI,AK,AR,AY,BC decision
+        class J,R,Z,AH,AJ,AS error
+    </div>
+    <button onclick="downloadHighRes()">Download High-Res</button>
+</body>
+
+</html>
